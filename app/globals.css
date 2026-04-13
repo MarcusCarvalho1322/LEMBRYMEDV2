@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --green: #1A5632;
+  --green-light: #E8F0EB;
+  --green-mid: #2D7A4A;
+  --green-accent: #22C55E;
+  --bg: #FEFEFE;
+  --text: #1A1A1A;
+  --sub: #4B5563;
+  --hint: #9CA3AF;
+  --card: #F8FAF9;
+  --border: #E0E7E3;
+  --font: 'DM Sans', sans-serif;
+  --serif: 'Playfair Display', serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); color: var(--text); background: var(--bg); }
