@@ -312,10 +312,11 @@ export default function LembrymedLanding() {
   const stats = useReveal();
   const steps = useReveal();
 
-  const Logo = ({ h = 32, white = false }) => (
+  const Logo = ({ h, white }: { h: number; white?: boolean }) => (
     <img
-      src="/logo.png" alt="Lembrymed"
-      style={{ height: h, objectFit: "contain", filter: white ? "brightness(0) invert(1)" : "none" }}
+      src="/logo.png"
+      alt="Lembrymed"
+      style={{ height: h, objectFit: "contain" as const, filter: white ? "brightness(0) invert(1)" : "none" }}
     />
   );
 
