@@ -21,9 +21,10 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
   position: sticky; top: 0; z-index: 50;
   box-shadow: 0 2px 16px rgba(0,0,0,0.18);
 }
-.nav-inner { display: flex; justify-content: space-between; align-items: center; }
-.nav-logo { height: 64px; }
+.nav-inner { display: flex; justify-content: center; align-items: center; position: relative; }
+.nav-logo { height: 22px; }
 .nav-cta {
+  position: absolute; right: 0;
   background: #fff; color: var(--green);
   padding: 10px 26px; border-radius: 8px; border: none;
   font-size: 14px; font-weight: 700; cursor: pointer; font-family: var(--font);
@@ -276,7 +277,8 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .steps { grid-template-columns: 1fr; }
   .wa-grid { grid-template-columns: 1fr; }
-  .nav-logo { height: 34px; }
+  .nav-logo { height: 18px; }
+  .nav-cta { font-size: 12px; padding: 8px 16px; }
 }
 `;
 
@@ -329,7 +331,7 @@ export default function LembrymedLanding() {
     {/* ── NAV verde com logo branca ── */}
     <nav className="nav">
       <div className="container nav-inner">
-        <Logo h={64} white />
+        <Logo h={22} />
         <button className="nav-cta" onClick={() => setShow(true)}>Assinar agora</button>
       </div>
     </nav>
