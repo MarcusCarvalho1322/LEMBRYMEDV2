@@ -1,11 +1,9 @@
 'use client';
 
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { adminLogin } from '@/lib/api';
-
-const AuthContext = createContext<{ token: string | null; logout: () => void }>({ token: null, logout: () => {} });
-export const useAuth = () => useContext(AuthContext);
+import { AuthContext } from '@/lib/auth-context';
 
 const NAV = [
   { icon: '📊', label: 'Dashboard', path: '/admin' },

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '../layout';
+import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 
 export default function RevenuePage() {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useAuth } from '../../layout';
+import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 
 export default function PatientDetailPage() {

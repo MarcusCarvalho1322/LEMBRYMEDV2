@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAuth } from '../layout';
+import { useAuth } from '@/lib/auth-context';
 import { api } from '@/lib/api';
 
 const QBox = ({ label, value, bg, color }: any) => (
