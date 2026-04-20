@@ -22,7 +22,7 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
   box-shadow: 0 2px 16px rgba(0,0,0,0.18);
 }
 .nav-inner { display: flex; justify-content: space-between; align-items: center; }
-.nav-logo { height: 42px; filter: brightness(0) invert(1); }
+.nav-logo { height: 64px; }
 .nav-cta {
   background: #fff; color: var(--green);
   padding: 10px 26px; border-radius: 8px; border: none;
@@ -46,18 +46,16 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
   background: radial-gradient(ellipse 70% 50% at 50% 60%, rgba(255,255,255,0.04) 0%, transparent 70%);
   pointer-events: none;
 }
-.impact-bg-number {
+.impact-logo-bg {
   position: absolute;
-  font-family: var(--serif);
-  font-size: clamp(220px, 35vw, 460px);
-  font-weight: 900;
-  color: rgba(255,255,255,0.03);
-  line-height: 1;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
+  width: clamp(480px, 75%, 960px);
+  opacity: 0.07;
+  mix-blend-mode: screen;
   pointer-events: none;
   user-select: none;
-  letter-spacing: -10px;
+  object-fit: contain;
 }
 .impact-inner { position: relative; z-index: 2; }
 .impact-eyebrow {
@@ -122,10 +120,10 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .hero { padding: 80px 0 60px; text-align: center; background: linear-gradient(180deg, var(--green-light) 0%, #FEFEFE 100%); }
 .hero-pill { display: inline-block; background: var(--green-light); color: var(--green); padding: 6px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; border: 1px solid var(--border); }
 .hero h1 { font-family: var(--serif); font-size: 46px; font-weight: 800; line-height: 1.12; max-width: 700px; margin: 0 auto 16px; color: var(--green); }
-.hero p { font-size: 18px; color: var(--sub); max-width: 520px; margin: 0 auto 32px; line-height: 1.65; }
-.hero-cta { display: inline-block; background: var(--green); color: #fff; padding: 16px 40px; border-radius: 10px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; font-family: var(--font); box-shadow: 0 4px 14px rgba(26,86,50,0.25); transition: all .2s; }
+.hero p { font-size: 22px; font-weight: 700; color: var(--sub); max-width: 560px; margin: 0 auto 32px; line-height: 1.65; }
+.hero-cta { display: inline-block; background: var(--green); color: #fff; padding: 16px 40px; border-radius: 10px; font-size: 18px; font-weight: 700; border: none; cursor: pointer; font-family: var(--font); box-shadow: 0 4px 14px rgba(26,86,50,0.25); transition: all .2s; }
 .hero-cta:hover { background: var(--green-mid); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(26,86,50,0.3); }
-.hero-sub { margin-top: 12px; font-size: 13px; color: var(--hint); }
+.hero-sub { margin-top: 12px; font-size: 17px; font-weight: 600; color: var(--hint); }
 
 /* ── STATS — bordas verdes dinâmicas ── */
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 48px 0; }
@@ -148,12 +146,12 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .stat:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 32px rgba(26,86,50,0.14); border-color: var(--green-mid); }
 .stat:hover::before { opacity: 1; }
 .stat-num { font-family: var(--serif); font-size: 38px; font-weight: 800; color: var(--green); }
-.stat-label { font-size: 13px; color: var(--sub); margin-top: 6px; line-height: 1.4; }
+.stat-label { font-size: 17px; font-weight: 700; color: var(--sub); margin-top: 6px; line-height: 1.4; }
 
 /* ── SECTIONS ── */
 .section { padding: 64px 0; }
 .section-title { text-align: center; font-family: var(--serif); font-size: 32px; font-weight: 700; color: var(--green); margin-bottom: 8px; }
-.section-sub { text-align: center; color: var(--sub); font-size: 16px; margin-bottom: 44px; }
+.section-sub { text-align: center; color: var(--sub); font-size: 20px; font-weight: 700; margin-bottom: 44px; }
 
 /* ── STEPS — bordas verdes dinâmicas ── */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
@@ -179,22 +177,23 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .step:hover { box-shadow: 0 12px 32px rgba(26,86,50,0.14); transform: translateY(-5px); border-color: var(--green-mid); }
 .step:hover::after { transform: scaleX(1); animation: shimmer 1.5s infinite; }
 .step-num { width: 44px; height: 44px; background: var(--green); color: #fff; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-family: var(--serif); font-size: 20px; font-weight: 700; margin-bottom: 16px; }
-.step h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
-.step p { font-size: 14px; color: var(--sub); line-height: 1.55; }
+.step h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.step p { font-size: 18px; font-weight: 600; color: var(--sub); line-height: 1.6; }
 
 /* ── WA SECTION ── */
 .wa-section { padding: 64px 0; background: var(--card); border-top: 2px solid var(--border); border-bottom: 2px solid var(--border); }
+.wa-section-title { text-align: center; font-family: var(--serif); font-size: 34px; font-weight: 700; color: var(--green); margin-bottom: 40px; }
 .wa-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
 .wa-phone { background: #E5DDD5; border-radius: 16px; padding: 20px; max-width: 360px; margin: 0 auto; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border: 2px solid var(--border); }
-.wa-header { background: var(--green); color: #fff; padding: 10px 14px; border-radius: 12px 12px 0 0; margin: -20px -20px 16px; font-size: 14px; font-weight: 600; }
-.wa-msg { background: #fff; border-radius: 0 8px 8px 8px; padding: 10px 14px; margin-bottom: 8px; font-size: 13.5px; line-height: 1.5; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
+.wa-header { background: var(--green); color: #fff; padding: 10px 14px; border-radius: 12px 12px 0 0; margin: -20px -20px 16px; font-size: 16px; font-weight: 700; }
+.wa-msg { background: #fff; border-radius: 0 8px 8px 8px; padding: 10px 14px; margin-bottom: 8px; font-size: 15px; font-weight: 600; line-height: 1.55; box-shadow: 0 1px 1px rgba(0,0,0,0.05); }
 .wa-msg.bot { background: #DCF8C6; border-radius: 8px 0 8px 8px; }
-.wa-msg .time { font-size: 10px; color: #999; text-align: right; margin-top: 4px; }
+.wa-msg .time { font-size: 11px; color: #999; text-align: right; margin-top: 4px; }
 .wa-msg strong { color: var(--text); }
-.wa-text h3 { font-family: var(--serif); font-size: 26px; font-weight: 700; margin-bottom: 14px; color: var(--green); }
-.wa-text p { color: var(--sub); line-height: 1.65; font-size: 15px; margin-bottom: 16px; }
-.wa-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 14px; color: var(--sub); }
-.wa-check span { color: var(--green); font-size: 18px; font-weight: 700; }
+.wa-text h3 { font-family: var(--serif); font-size: 28px; font-weight: 700; margin-bottom: 14px; color: var(--green); }
+.wa-text p { color: var(--sub); line-height: 1.65; font-size: 19px; font-weight: 700; margin-bottom: 16px; }
+.wa-check { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 18px; font-weight: 700; color: var(--sub); }
+.wa-check span { color: var(--green); font-size: 20px; font-weight: 700; }
 
 /* ── PRICING ── */
 .pricing { padding: 64px 0; text-align: center; }
@@ -216,10 +215,10 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .price-card:hover { transform: translateY(-4px); box-shadow: 0 20px 52px rgba(26,86,50,0.16); }
 .price-badge { display: inline-block; background: var(--green); color: #fff; padding: 5px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 20px; }
 .price-amount { font-family: var(--serif); font-size: 52px; font-weight: 800; color: var(--green); }
-.price-per { font-size: 16px; color: var(--sub); }
-.price-monthly { font-size: 14px; color: var(--hint); margin: 6px 0 24px; }
+.price-per { font-size: 20px; font-weight: 700; color: var(--sub); }
+.price-monthly { font-size: 18px; font-weight: 600; color: var(--hint); margin: 6px 0 24px; }
 .price-features { text-align: left; margin-bottom: 28px; }
-.price-feat { display: flex; align-items: center; gap: 10px; padding: 7px 0; font-size: 14px; color: var(--sub); border-bottom: 1px solid rgba(26,86,50,0.08); }
+.price-feat { display: flex; align-items: center; gap: 10px; padding: 9px 0; font-size: 18px; font-weight: 700; color: var(--sub); border-bottom: 1px solid rgba(26,86,50,0.08); }
 .price-feat:last-child { border-bottom: none; }
 .price-feat span { color: var(--green); font-weight: 700; }
 
@@ -227,8 +226,8 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 999; }
 .modal { background: #fff; border-radius: 20px; padding: 40px; max-width: 440px; width: 92%; border: 2px solid var(--border); }
 .form-group { margin-bottom: 16px; }
-.form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--sub); }
-.form-input { width: 100%; padding: 13px 14px; border: 1.5px solid #E0E7E3; border-radius: 10px; font-size: 15px; font-family: var(--font); outline: none; transition: border-color .2s; }
+.form-group label { display: block; font-size: 17px; font-weight: 700; margin-bottom: 6px; color: var(--sub); }
+.form-input { width: 100%; padding: 13px 14px; border: 1.5px solid #E0E7E3; border-radius: 10px; font-size: 18px; font-weight: 600; font-family: var(--font); outline: none; transition: border-color .2s; }
 .form-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(26,86,50,0.08); }
 
 /* ── FAQ ── */
@@ -239,13 +238,13 @@ body { font-family: var(--font); color: var(--text); background: var(--bg); }
   transition: all .2s;
 }
 .faq-item:hover { padding-left: 8px; }
-.faq-q { font-weight: 600; font-size: 15px; display: flex; justify-content: space-between; align-items: center; }
-.faq-a { font-size: 14px; color: var(--sub); line-height: 1.6; margin-top: 10px; border-left: 3px solid var(--green); padding-left: 12px; }
+.faq-q { font-weight: 700; font-size: 19px; display: flex; justify-content: space-between; align-items: center; }
+.faq-a { font-size: 18px; font-weight: 600; color: var(--sub); line-height: 1.6; margin-top: 10px; border-left: 3px solid var(--green); padding-left: 12px; }
 
 /* ── FOOTER ── */
 .footer { padding: 36px 0; border-top: 2px solid var(--border); text-align: center; background: var(--card); }
-.footer p { font-size: 12px; color: var(--hint); }
-.footer .disc { font-size: 11px; color: var(--hint); margin-top: 6px; font-style: italic; }
+.footer p { font-size: 16px; font-weight: 600; color: var(--hint); }
+.footer .disc { font-size: 15px; color: var(--hint); margin-top: 6px; font-style: italic; }
 
 /* ── KEYFRAMES ── */
 @keyframes fadeInUp {
@@ -307,7 +306,7 @@ function useReveal() {
 function Logo({ h, white }: { h: number; white?: boolean }) {
   return (
     <img
-      src="/logo.png"
+      src="/logo-new.png"
       alt="Lembrymed"
       style={{ height: h, objectFit: "contain" as const, filter: white ? "brightness(0) invert(1)" : "none" }}
     />
@@ -318,6 +317,8 @@ export default function LembrymedLanding() {
   const [show, setShow] = useState(false);
   const [faq, setFaq] = useState(-1);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [loading, setLoading] = useState(false);
+  const [formError, setFormError] = useState("");
 
   const stats = useReveal();
   const steps = useReveal();
@@ -328,14 +329,14 @@ export default function LembrymedLanding() {
     {/* ── NAV verde com logo branca ── */}
     <nav className="nav">
       <div className="container nav-inner">
-        <Logo h={42} white />
+        <Logo h={64} white />
         <button className="nav-cta" onClick={() => setShow(true)}>Assinar agora</button>
       </div>
     </nav>
 
     {/* ── NOVA HERO DE IMPACTO ── */}
     <section className="impact">
-      <div className="impact-bg-number">5/10</div>
+      <img className="impact-logo-bg" src="/logo-new.png" alt="" aria-hidden="true" />
       <div className="container impact-inner">
         <div className="impact-eyebrow">📊 Dado Clínico — OMS / Fiocruz</div>
         <h1>
@@ -362,7 +363,7 @@ export default function LembrymedLanding() {
     <section className="hero"><div className="container">
       <Logo h={64} /><br/><br/>
       <div className="hero-pill">100% via WhatsApp — sem app</div>
-      <h1>Nunca mais esqueça seus medicamentos</h1>
+      <h1>Nunca mais esqueça seus medicamentos com o Lembrymed</h1>
       <p>Lembretes inteligentes direto no seu WhatsApp. Cadastre uma vez, receba avisos todos os dias. Se esquecer, seu familiar é avisado.</p>
       <button className="hero-cta" onClick={() => setShow(true)}>Assinar por R$ 149/ano</button>
       <div className="hero-sub">Equivale a R$ 12,42/mês — cancele quando quiser</div>
@@ -401,7 +402,7 @@ export default function LembrymedLanding() {
         <div ref={steps.ref} className="steps">
           {[
             { n: "1", h: "Assine e cadastre", p: "Faça sua assinatura e cadastre seus medicamentos por texto ou foto da receita. Nossa IA identifica tudo." },
-            { n: "2", h: "Receba lembretes",  p: "30 min antes, 5 min antes e na hora. Confirme com um simples "SIM" no WhatsApp." },
+            { n: "2", h: "Receba lembretes",  p: "30 min antes, 5 min antes e na hora. Confirme com um simples 'SIM' no WhatsApp." },
             { n: "3", h: "Familiar protegido", p: "Se não confirmar em 30 min, seu familiar cadastrado recebe alerta automático." },
           ].map((s, i) => (
             <div
@@ -419,7 +420,9 @@ export default function LembrymedLanding() {
     </section>
 
     {/* ── WHATSAPP ── */}
-    <section className="wa-section"><div className="container"><div className="wa-grid">
+    <section className="wa-section"><div className="container">
+      <div className="wa-section-title">Segurança para o Paciente e para a Família</div>
+      <div className="wa-grid">
       <div className="wa-phone">
         <div className="wa-header">Lembrymed</div>
         <div className="wa-msg bot">Olá, João! 👋 Bem-vindo ao Lembrymed!<br/>Sua assinatura está ativa.<div className="time">09:01</div></div>
@@ -457,7 +460,7 @@ export default function LembrymedLanding() {
 
     {/* ── MODAL ── */}
     {show && (
-      <div className="modal-overlay" onClick={() => setShow(false)}>
+      <div className="modal-overlay" onClick={() => { if (!loading) setShow(false); }}>
         <div className="modal" onClick={e => e.stopPropagation()}>
           <div style={{textAlign:"center",marginBottom:24}}>
             <Logo h={44} />
@@ -466,8 +469,40 @@ export default function LembrymedLanding() {
           <div className="form-group"><label>Seu nome completo</label><input className="form-input" placeholder="João da Silva" value={form.name} onChange={e => setForm({...form, name: e.target.value})} /></div>
           <div className="form-group"><label>E-mail</label><input className="form-input" type="email" placeholder="joao@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} /></div>
           <div className="form-group"><label>WhatsApp (com DDD)</label><input className="form-input" placeholder="11 99999-9999" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} /></div>
-          <button className="hero-cta" style={{width:"100%",marginTop:8}} onClick={() => setShow(false)}>Pagar com cartão ou Pix</button>
-          <div style={{textAlign:"center",fontSize:11,color:"var(--hint)",marginTop:12}}>Pagamento seguro via Stripe</div>
+          {formError && <div style={{color:"#c00",fontSize:15,fontWeight:600,marginBottom:8,textAlign:"center"}}>{formError}</div>}
+          <button
+            className="hero-cta"
+            style={{width:"100%",marginTop:8,opacity:loading?0.7:1,cursor:loading?"not-allowed":"pointer"}}
+            disabled={loading}
+            onClick={async () => {
+              setFormError("");
+              if (!form.name.trim() || !form.email.trim() || !form.phone.trim()) {
+                setFormError("Preencha todos os campos para continuar.");
+                return;
+              }
+              setLoading(true);
+              try {
+                const res = await fetch("/api/checkout", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() }),
+                });
+                const data = await res.json();
+                if (!res.ok || !data.url) {
+                  setFormError(data.error || "Erro ao iniciar pagamento. Tente novamente.");
+                  setLoading(false);
+                  return;
+                }
+                window.location.href = data.url;
+              } catch {
+                setFormError("Erro de conexão. Verifique sua internet e tente novamente.");
+                setLoading(false);
+              }
+            }}
+          >
+            {loading ? "Aguarde..." : "Pagar com cartão ou Pix →"}
+          </button>
+          <div style={{textAlign:"center",fontSize:11,color:"var(--hint)",marginTop:12}}>🔒 Pagamento 100% seguro via Stripe</div>
         </div>
       </div>
     )}
