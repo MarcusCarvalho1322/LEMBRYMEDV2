@@ -304,6 +304,16 @@ function useReveal() {
   return { ref, visible };
 }
 
+function Logo({ h, white }: { h: number; white?: boolean }) {
+  return (
+    <img
+      src="/logo.png"
+      alt="Lembrymed"
+      style={{ height: h, objectFit: "contain" as const, filter: white ? "brightness(0) invert(1)" : "none" }}
+    />
+  );
+}
+
 export default function LembrymedLanding() {
   const [show, setShow] = useState(false);
   const [faq, setFaq] = useState(-1);
@@ -311,14 +321,6 @@ export default function LembrymedLanding() {
 
   const stats = useReveal();
   const steps = useReveal();
-
-  const Logo = ({ h, white }: { h: number; white?: boolean }) => (
-    <img
-      src="/logo.png"
-      alt="Lembrymed"
-      style={{ height: h, objectFit: "contain" as const, filter: white ? "brightness(0) invert(1)" : "none" }}
-    />
-  );
 
   return (<>
     <style>{S}</style>
