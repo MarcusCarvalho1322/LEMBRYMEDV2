@@ -1,28 +1,21 @@
 /**
  * @module Webhook Stripe
- * @description Recebe confirmação de pagamento, envia WhatsApp de boas-vindas
- * DIRETAMENTE via Z-API e, em paralelo, tenta iniciar o Managed Agent de onboarding.
- *
- * Arquitetura de resiliência:
+ * @description Recebe confirmação de pagamento:
  *   1. Criar/atualizar paciente + assinatura no banco (upsert — tolerante a duplicatas)
- *   2. Enviar mensagem WhatsApp de boas-vindas DIRETAMENTE (crítico, não depende do Agent)
- *   3. Tentar criar sessão Managed Agent (melhor esforço, falha não bloqueia nada)
+ *   2. Enviar mensagem WhatsApp de boas-vindas DIRETAMENTE via Z-API
+ *   3. Onboarding continua via conversa WhatsApp (Claude messages.create em whatsapp.ts)
  */
 
 import { Router } from 'express';
 import Stripe from 'stripe';
-import Anthropic from '@anthropic-ai/sdk';
 import { db, patients, subscriptions } from '@lembrymed/database';
 import { eq } from 'drizzle-orm';
-import { processSessionStream } from '../../services/session-stream.service';
 import { WhatsAppClient } from '../../clients/dialog360.client';
 import { logger } from '@lembrymed/shared/logger';
 
 const router = Router();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const anthropic = new Anthropic();
 const whatsapp = new WhatsAppClient();
-const BETA = { 'anthropic-beta': 'managed-agents-2026-04-01' };
 
 /**
  * Mensagem de boas-vindas enviada imediatamente após pagamento confirmado.
@@ -78,14 +71,14 @@ router.post('/webhook/stripe', async (req, res) => {
         fullName: name,
         email: email || undefined,
         phone,
-        onboardingStep: 'payment_confirmed',
+        onboardingStep: 'welcome_sent',
       })
       .onConflictDoUpdate({
         target: patients.phone,
         set: {
           fullName: name,
           email: email || undefined,
-          onboardingStep: 'payment_confirmed',
+          onboardingStep: 'welcome_sent',
           updatedAt: new Date(),
         },
       })
@@ -141,48 +134,13 @@ router.post('/webhook/stripe', async (req, res) => {
     });
   }
 
-  // ─── PASSO 3: Managed Agent (melhor esforço) ─────────────────────────────
-  try {
-    logger.info('Attempting Managed Agent session', {
-      agentId: process.env.ONBOARDING_AGENT_ID,
-      envId: process.env.MANAGED_AGENT_ENV_ID,
-    });
-
-    const agentSession = await (anthropic.beta as any).sessions.create({
-      agent: process.env.ONBOARDING_AGENT_ID!,
-      environment_id: process.env.MANAGED_AGENT_ENV_ID!,
-      title: `Onboarding: ${name} (${phone})`,
-    }, { headers: BETA });
-
-    await db.update(patients)
-      .set({ agentSessionId: agentSession.id })
-      .where(eq(patients.id, patientId));
-
-    await (anthropic.beta as any).sessions.events.create(agentSession.id, {
-      events: [{
-        type: 'user.message',
-        content: [{
-          type: 'text',
-          text:
-            `Paciente cadastrado e boas-vindas já enviadas no WhatsApp.\n` +
-            `Aguarde a resposta para continuar o onboarding.\n\n` +
-            `Nome: ${name}\nTelefone: ${phone}\nEmail: ${email || 'não informado'}\nPlano: Anual`,
-        }],
-      }],
-    }, { headers: BETA });
-
-    processSessionStream(agentSession.id).catch((err) =>
-      logger.error('Stream failed', { error: err.message, phone })
-    );
-
-    logger.info('Managed Agent started', { sessionId: agentSession.id, phone });
-  } catch (error: any) {
-    logger.error('Managed Agent failed (non-critical — WhatsApp already sent)', {
-      error: error.message,
-      status: (error as any).status,
-      phone,
-    });
-  }
+  // ─── PASSO 3: Onboarding via WhatsApp ────────────────────────────────────
+  // O onboarding continua automaticamente quando o paciente responder o WhatsApp.
+  // O webhook /webhook/whatsapp usa Claude (messages.create) para conduzir a conversa.
+  logger.info('Stripe webhook processado com sucesso — aguardando resposta do paciente no WhatsApp', {
+    patientId,
+    phone,
+  });
 });
 
 export default router;
