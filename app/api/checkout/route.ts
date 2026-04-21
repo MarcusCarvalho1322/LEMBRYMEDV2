@@ -34,7 +34,11 @@ export async function POST(req: NextRequest) {
     }
 
     const formattedPhone = formatPhone(phone);
-    const webUrl = process.env.NEXT_PUBLIC_WEB_URL || process.env.NEXTAUTH_URL || 'https://lembrymed.vercel.app';
+    // VERCEL_PROJECT_PRODUCTION_URL é setado automaticamente pelo Vercel com o domínio de produção
+    const webUrl = process.env.NEXT_PUBLIC_WEB_URL
+      || (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null)
+      || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null)
+      || 'https://lembrymedv-2.vercel.app';
 
     // Criar sessão de checkout Stripe
     const session = await stripe.checkout.sessions.create({
