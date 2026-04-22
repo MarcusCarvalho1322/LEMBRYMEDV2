@@ -3,13 +3,17 @@
 import { useState, useEffect, useRef } from "react";
 
 const S = `
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap');
+/* Fontes carregadas via next/font em app/layout.tsx — vars --font-dm-sans
+   e --font-playfair ficam disponíveis no elemento <html>. */
 * { margin:0; padding:0; box-sizing:border-box; }
 :root {
   --green: #1A5632; --green-light: #E8F0EB; --green-mid: #2D7A4A; --green-dark: #0F3D23;
-  --bg: #FEFEFE; --text: #1A1A1A; --sub: #4B5563; --hint: #9CA3AF;
+  --bg: #FEFEFE; --text: #1A1A1A; --sub: #4B5563;
+  /* --hint ajustado para contraste WCAG AA (ratio ≥ 4.5:1 sobre bg #FEFEFE) */
+  --hint: #6B7280;
   --card: #F8FAF9; --border: #1A5632;
-  --font: 'DM Sans', sans-serif; --serif: 'Playfair Display', serif;
+  --font: var(--font-dm-sans), 'DM Sans', sans-serif;
+  --serif: var(--font-playfair), 'Playfair Display', serif;
 }
 body { font-family: var(--font); color: var(--text); background: var(--bg); }
 .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
@@ -319,11 +323,34 @@ export default function LembrymedLanding() {
   const [show, setShow] = useState(false);
   const [faq, setFaq] = useState(-1);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [consentAccepted, setConsentAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
 
   const stats = useReveal();
   const steps = useReveal();
+
+  // Abrir modal automaticamente quando /checkout redireciona para cá
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('checkout') === '1') {
+      setShow(true);
+      // limpar query string sem recarregar
+      const clean = window.location.pathname;
+      window.history.replaceState({}, '', clean);
+    }
+  }, []);
+
+  // Fechar modal com Esc (acessibilidade)
+  useEffect(() => {
+    if (!show) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && !loading) setShow(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [show, loading]);
 
   return (<>
     <style>{S}</style>
@@ -340,14 +367,23 @@ export default function LembrymedLanding() {
     <section className="impact">
       <img className="impact-logo-bg" src="/logo-new.png" alt="" aria-hidden="true" />
       <div className="container impact-inner">
-        <div className="impact-eyebrow">📊 Dado Clínico — OMS / Fiocruz</div>
+        <div className="impact-eyebrow">📊 Dado Clínico — OMS</div>
         <h1>
-          <span className="highlight">5 em cada 10</span> pacientes não tomam
-          suas medicações de forma correta
+          <span className="highlight">Cerca de 50%</span> dos pacientes com doenças
+          crônicas não tomam a medicação corretamente
         </h1>
         <p className="impact-sub">
           A principal causa é o <strong style={{color:'#fff', fontWeight:700}}>esquecimento</strong>.
           Uma solução simples pode mudar esse número.
+          <br/>
+          <a
+            href="https://apps.who.int/iris/handle/10665/42682"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{fontSize:12, color:'rgba(255,255,255,0.55)', textDecoration:'underline', marginTop:8, display:'inline-block'}}
+          >
+            Fonte: OMS — Adherence to Long-term Therapies (2003)
+          </a>
         </p>
         <button className="impact-cta" onClick={() => setShow(true)}>
           Quero parar de esquecer →
@@ -460,18 +496,62 @@ export default function LembrymedLanding() {
       </div>
     </div></section>
 
-    {/* ── MODAL ── */}
+    {/* ── MODAL DE ASSINATURA ── */}
     {show && (
-      <div className="modal-overlay" onClick={() => { if (!loading) setShow(false); }}>
+      <div
+        className="modal-overlay"
+        onClick={() => { if (!loading) setShow(false); }}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="checkout-title"
+      >
         <div className="modal" onClick={e => e.stopPropagation()}>
           <div style={{textAlign:"center",marginBottom:24}}>
             <Logo h={44} />
-            <div style={{color:"var(--sub)",fontSize:14,marginTop:8}}>Assinatura Anual — R$ 149,00</div>
+            <div id="checkout-title" style={{color:"var(--sub)",fontSize:14,marginTop:8,fontWeight:600}}>
+              Assinatura Anual — R$ 149,00
+            </div>
           </div>
-          <div className="form-group"><label>Seu nome completo</label><input className="form-input" placeholder="João da Silva" value={form.name} onChange={e => setForm({...form, name: e.target.value})} /></div>
-          <div className="form-group"><label>E-mail</label><input className="form-input" type="email" placeholder="joao@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} /></div>
-          <div className="form-group"><label>WhatsApp (com DDD)</label><input className="form-input" placeholder="11 99999-9999" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} /></div>
-          {formError && <div style={{color:"#c00",fontSize:15,fontWeight:600,marginBottom:8,textAlign:"center"}}>{formError}</div>}
+          <div className="form-group">
+            <label htmlFor="cf-name">Seu nome completo</label>
+            <input id="cf-name" className="form-input" placeholder="João da Silva"
+              autoComplete="name" required
+              value={form.name} onChange={e => setForm({...form, name: e.target.value})} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cf-email">E-mail</label>
+            <input id="cf-email" className="form-input" type="email" placeholder="joao@email.com"
+              autoComplete="email" inputMode="email" required
+              value={form.email} onChange={e => setForm({...form, email: e.target.value})} />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cf-phone">WhatsApp (com DDD)</label>
+            <input id="cf-phone" className="form-input" type="tel" placeholder="11 99999-9999"
+              autoComplete="tel" inputMode="tel" required
+              value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} />
+          </div>
+
+          {/* LGPD — consentimento explícito antes do pagamento */}
+          <div style={{display:"flex",gap:10,alignItems:"flex-start",margin:"12px 0 16px",fontSize:13,lineHeight:1.5,color:"var(--sub)"}}>
+            <input
+              id="cf-consent"
+              type="checkbox"
+              checked={consentAccepted}
+              onChange={e => setConsentAccepted(e.target.checked)}
+              style={{marginTop:3,width:16,height:16,accentColor:"var(--green)",cursor:"pointer",flexShrink:0}}
+            />
+            <label htmlFor="cf-consent" style={{cursor:"pointer"}}>
+              Li e aceito a <a href="/privacidade" target="_blank" rel="noopener" style={{color:"var(--green)",fontWeight:700,textDecoration:"underline"}}>Política de Privacidade</a> e os
+              {' '}<a href="/termos" target="_blank" rel="noopener" style={{color:"var(--green)",fontWeight:700,textDecoration:"underline"}}>Termos de Uso</a>.
+              Autorizo o tratamento dos meus dados de saúde para envio dos lembretes via WhatsApp, conforme Lei 13.709/2018 (LGPD).
+            </label>
+          </div>
+
+          {formError && (
+            <div role="alert" aria-live="polite" style={{color:"#c00",fontSize:15,fontWeight:600,marginBottom:8,textAlign:"center"}}>
+              {formError}
+            </div>
+          )}
           <button
             className="hero-cta"
             style={{width:"100%",marginTop:8,opacity:loading?0.7:1,cursor:loading?"not-allowed":"pointer"}}
@@ -482,12 +562,22 @@ export default function LembrymedLanding() {
                 setFormError("Preencha todos os campos para continuar.");
                 return;
               }
+              if (!consentAccepted) {
+                setFormError("Para prosseguir, aceite a Política de Privacidade e os Termos.");
+                return;
+              }
               setLoading(true);
               try {
                 const res = await fetch("/api/checkout", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ name: form.name.trim(), email: form.email.trim(), phone: form.phone.trim() }),
+                  body: JSON.stringify({
+                    name: form.name.trim(),
+                    email: form.email.trim(),
+                    phone: form.phone.trim(),
+                    consentAccepted: true,
+                    consentVersion: 'v1.0-2026-04-22',
+                  }),
                 });
                 const data = await res.json();
                 if (!res.ok || !data.url) {
@@ -504,7 +594,9 @@ export default function LembrymedLanding() {
           >
             {loading ? "Aguarde..." : "Pagar com cartão ou Pix →"}
           </button>
-          <div style={{textAlign:"center",fontSize:11,color:"var(--hint)",marginTop:12}}>🔒 Pagamento 100% seguro via Stripe</div>
+          <div style={{textAlign:"center",fontSize:11,color:"var(--hint)",marginTop:12}}>
+            🔒 Pagamento 100% seguro via Stripe
+          </div>
         </div>
       </div>
     )}
